@@ -1,0 +1,116 @@
+---
+title: "Ancestral state reconstruction"
+output: html_notebook
+---
+
+```{r}
+library(phytools)
+library(tidyverse)
+library(lubridate)
+library(foreach)
+library(doParallel)
+library(phangorn)
+
+tree <- read.tree("data/fig3_translocation_direction/single_sample_gubbins_tree.mproot.tre")  # figtree midpoint root
+tree$tip.label <- gsub("['\"]", "", tree$tip.label)
+
+bs_data<- read.csv("data/Extended_Data_Table1_cocov_study_data.tsv", sep='\t')
+
+bs_data<-  bs_data %>%
+  mutate(date = dmy(date), 
+         date = format(date,"%Y-%m-%d")) %>%
+  unite("meta_column", patient, sample_type, lane, date, remove = FALSE) # %>%
+  # filter(meta_column %in% tree$tip.label)
+
+respiratory_df<- bs_data %>% 
+  group_by(patient, strain, sample_type) %>%
+  summarise(count = n(), .groups = 'drop') %>%
+  filter(sample_type == 'respiratory' | sample_type == 'nasal')
+
+resp_pres_absence<- bs_data %>%
+  filter(meta_column %in% tree$tip.label) %>%
+   mutate(resp_presence = ifelse(paste(patient, strain) %in% paste(respiratory_df$patient, respiratory_df$strain), "resp", "gut")) %>%
+  mutate(resp_absence = ifelse(resp_presence == "resp", "gut", "resp"))
+
+resp_pres_absence<- resp_pres_absence %>%
+  select(meta_column, resp_presence, resp_absence) %>%
+  mutate(resp_presence = as.factor(resp_presence))
+
+write.csv(resp_pres_absence, "data/fig3_translocation_direction/tip_states_for_ancr.csv", row.names = FALSE)
+
+# Data 
+bs_sample_type<- setNames(
+  resp_pres_absence$resp_presence,
+  resp_pres_absence$meta_column)
+
+
+bs_samples_er<-fitMk(tree,bs_sample_type,
+  model="ER",pi="fitzjohn")
+bs_samples_ard<-fitMk(tree,bs_sample_type,
+  model="ARD",pi="fitzjohn")
+bs_samples_sym<-fitMk(tree,bs_sample_type,
+  model="SYM",pi="fitzjohn")
+
+bs_samples_aov<- anova(bs_samples_er, bs_samples_ard, bs_samples_sym)
+
+bs_joint<-ancr(bs_samples_er, type="joint")
+bs_marginal<-ancr(bs_samples_er, type="marginal")
+
+# bs_joint<-ancr(bs_samples_sym, type="joint")
+# bs_marginal<-ancr(bs_samples_sym, type="marginal")
+
+# bs_joint<-ancr(bs_samples_ard, type="joint")
+# bs_marginal<-ancr(bs_samples_ard, type="marginal")
+
+# bs_joint<-ancr(bs_samples_aov, type="joint")
+# bs_marginal<-ancr(bs_samples_aov, type="marginal")
+
+
+state_index <- which(levels(bs_sample_type) == "resp")
+state_posteriors <- bs_marginal$ace[, state_index]  
+
+pdf("data/fig3_translocation_direction/output_plots_er.pdf", width=8, height=10)
+par(mfrow=c(2,1))
+
+
+obj<-plot(bs_joint, legend=FALSE)
+legend("bottomright",levels(bs_sample_type),
+  pch=16,
+  col=obj$piecol,
+  bty="n",
+  cex=0.8,
+  pt.cex=1)
+add.scale.bar(length = 0.05, cex = 0.8, col = "black", font = 2)
+
+
+obj<-plot(bs_marginal,
+  legend=FALSE)
+legend("bottomright",levels(bs_sample_type),
+  pch=16,
+  col=obj$piecol,
+  bty="n",cex=0.8,
+  pt.cex=1)
+add.scale.bar(length = 0.05, cex = 0.8, col = "black", font = 2)
+
+nodelabels(text = state_posteriors,  # Round probabilities to 2 decimals
+           frame = "none",  # No box around the labels
+           cex = 0.7,       # Adjust text size
+           adj = c(1, 0.5)) 
+dev.off()
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
