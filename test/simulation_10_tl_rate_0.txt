@@ -1,0 +1,6 @@
+ward	multi_clone_rate(%)	z_score	p_value	mean	stdev	sim_number	translocation_rate
+Intensive_Care_Unit_III_Cardiac_Surgery	90.0	5.2951356487309695	5.946404750438376e-08	36.0	10.198039027185569	10	0
+Intensive_Care_Unit_I_Inpatients	80.0	6.465987068038796	5.031984257811863e-11	19.0	9.433981132056603	10	0
+Intensive_Care_Unit_c/o_Infectious_Diseases	80.0	5.4272042023997455	2.8621812133695385e-08	8.0	13.2664991614216	10	0
+ICU_cardiac/ICU_Inpatients/ICU_infectious_disease(merged)	83.3	9.875937879833204	1.0	19.990000000000002	6.410530399272747	10	0
+Every_ward	84.0	10.529411764705882	3.161417651222233e-26	12.4	6.8	10	0

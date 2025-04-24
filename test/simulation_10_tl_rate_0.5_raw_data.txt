@@ -1,0 +1,11 @@
+Intensive_Care_Unit_III_Cardiac_Surgery|n_sim:10|tl_rate:0.5	Intensive_Care_Unit_I_Inpatients|n_sim:10|tl_rate:0.5	Intensive_Care_Unit_c/o_Infectious_Diseases|n_sim:10|tl_rate:0.5	ICU_cardiac/ICU_Inpatients/ICU_infectious_disease(merged)|n_sim:10|tl_rate:0.5	Every_ward|n_sim:10|tl_rate:0.5
+60.0	60.0	40.0	58.3	44.0
+70.0	60.0	60.0	50.0	60.0
+70.0	60.0	60.0	41.7	60.0
+70.0	70.0	40.0	50.0	40.0
+70.0	70.0	100.0	62.5	32.0
+80.0	40.0	40.0	54.2	68.0
+80.0	40.0	60.0	62.5	56.0
+60.0	30.0	40.0	50.0	48.0
+80.0	40.0	40.0	62.5	64.0
+70.0	30.0	40.0	37.5	44.0
