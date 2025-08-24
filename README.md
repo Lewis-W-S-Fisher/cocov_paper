@@ -6,10 +6,21 @@ Small data files can be found within the /data directory of the github page. The
 
 1. A whole phylogeny of all *P. aeruginosa* samples that were included within the study ```data/fig1_whole_tree/fig.1_whole_tree.tre```
 
-2. Translocation simulations were based on combined ward metadata and clone classifcation data in the study. 
+2. Translocation simulations were based on combined ward metadata and clone classifcation data in the study. The code can be found within the ```src/translocation_simulations.ipynb``` jupyter notebook.
    In "Exploring Patient data" these metadata are processed to understand the diversity of clones that were found within each ward. 
 
-   The "performing translocation simulations section requires the supplementary appendix 4 table from Thorpe *et al* (2024) and ```data/Extended_Data_Table3_cocov_study_data.tsv```. Functions needed to simulate translocations are defined at the top of the code block. An output directory is specified. 
+   The "performing translocation simulations" section requires the supplementary appendix 4 table from Thorpe *et al* (2024) and corresponse to ```data/Extended_Data_Table3_cocov_study_data.tsv``` in the notebook. Functions needed to simulate translocations are defined at the top of the code block. An output directory is specified. 
+
+   Some variables can be changed to match the those selected for the study. Comments can be found within the notebook.
+   ```
+   n_sim = 10
+   tl_rate = 0.25
+   tl_proportion = 1
+   ```
+
+3. The code to perform the marginla ancestral state reconstruction can be found within the ```src/cocov_ancestral_state_reconstruction.Rmd```. The tree and metadata files can be found within ```/data/fig3_translocation_direction```.
+
+
 
 
 ```

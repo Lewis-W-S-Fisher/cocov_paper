@@ -14,7 +14,7 @@ library(phangorn)
 tree <- read.tree("data/fig3_translocation_direction/single_sample_gubbins_tree.mproot.tre")  # figtree midpoint root
 tree$tip.label <- gsub("['\"]", "", tree$tip.label)
 
-bs_data<- read.csv("data/Extended_Data_Table1_cocov_study_data.tsv", sep='\t')
+bs_data<- read.csv("data/Extended_Data_Table3_cocov_study_data.tsv", sep='\t')
 
 bs_data<-  bs_data %>%
   mutate(date = dmy(date), 
@@ -92,10 +92,10 @@ legend("bottomright",levels(bs_sample_type),
   pt.cex=1)
 add.scale.bar(length = 0.05, cex = 0.8, col = "black", font = 2)
 
-nodelabels(text = state_posteriors,  # Round probabilities to 2 decimals
-           frame = "none",  # No box around the labels
-           cex = 0.7,       # Adjust text size
-           adj = c(1, 0.5)) 
+nodelabels(text = state_posteriors,
+           frame = "none",
+           cex = 0.7,
+           adj = c(1, 0.5))
 dev.off()
 
 
