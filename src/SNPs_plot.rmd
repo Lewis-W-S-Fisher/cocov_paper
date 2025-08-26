@@ -1,0 +1,46 @@
+---
+title: "AMR Plot"
+output: html_notebook
+---
+
+
+```{r remaking plots}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(stringr)
+library(viridis) 
+
+all_gene_counts_df<- read.csv('data/fig4_non_synonymous_mutations/Fig_4_intra-host_mutations.csvsrc SN', header = TRUE, check.names = FALSE, sep = ',')
+
+snp_counts_ordered<- mixedsort(unique(all_gene_counts_df$gene), decreasing = FALSE)
+all_gene_counts_df$gene<- factor(all_gene_counts_df$gene, levels = snp_counts_ordered)
+graph_order_vector<- c('ampD','ampR','gyrB','mexD','mexR','mexT','nalC','nfxB','parR','pmrB',
+  'amiA','cyaB','KKMFPENE_01672','KKMFPENE_01694','KKMFPENE_02291','KKMFPENE_03216',
+  'KKMFPENE_03385','LEOBFFEF_03023','murI','NNIDDOJM_01097','OJDINKJF_03377','PA5078','PGAFIIAH_04841','PGAFIIAH_05643','phzC1_1')
+
+genes <- all_gene_counts_df %>%
+  mutate(gene = factor(gene, levels = rev(graph_order_vector))) %>%  # Convert to factor with specified order
+  arrange(gene) %>%
+  group_by(gene, effect) %>%
+  mutate(gene_counts = n(), effect = str_remove(effect, 'MC,|,MC')) %>%
+  select(effect, gene, gene_counts) %>%
+  distinct()
+
+write.csv(genes, "data/fig4_non_synonymous_mutations/intra_host_snps.csv", sep = ',', row.names = FALSE)
+
+total_snps_by_count_plt<- ggbarplot(genes, x = 'gene', y = 'gene_counts', fill = 'effect', 
+           color = 'effect', xlab = 'Gene', ylab = 'Total SNPs') +
+  scale_y_continuous(breaks = seq(0, max(genes$gene_counts), by = 2))+
+      scale_color_viridis(discrete = TRUE, begin = 0, end = 0.3) +
+      scale_fill_viridis(discrete = TRUE, begin = 0, end = 0.3) +
+      theme(axis.text.y = element_text(size = 12), 
+          axis.text.x = element_text(size = 12),
+          axis.title.x = element_text(size = 15), 
+          axis.title.y = element_text(size = 15, angle = 90),
+          legend.position = "top",
+          legend.text = element_text(size = 12),
+          legend.title = element_text(size = 15)) + 
+  coord_flip()
+
+```
