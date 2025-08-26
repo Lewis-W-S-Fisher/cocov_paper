@@ -20,10 +20,4 @@ Small data files can be found within the /data directory of the github page. The
 
 3. The code to perform the marginla ancestral state reconstruction can be found within the ```src/cocov_ancestral_state_reconstruction.Rmd```. The tree and metadata files can be found within ```/data/fig3_translocation_direction```.
 
-
-
-
-```
-# All metadata from the original cocov study by Thorpe et al. 
-clu_out_summaries_metadata.tsv
-```
+4. The code to plot the intra-host SNPs for figure 4 can be found in ```src/SNPs_plot.rmd```. The data is contained within ```data/fig4_non_synonymous_mutations/Fig_4_intra-host_mutations.csv```. 
